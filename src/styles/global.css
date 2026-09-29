@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-ink: #0a0a0a;
+  --color-paper: #ffffff;
+}
+
+@layer components {
+  #actions .btn {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    border: 1px solid var(--color-ink);
+    border-radius: 1rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  #actions .btn:hover {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  #actions .btn-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #actions .btn-icon {
+    width: 20px;
+  }
+}

@@ -1,0 +1,68 @@
+---
+import type { GetStaticPaths } from "astro";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import { getAllLogEntries, type LogEntry } from "../../lib/contentful";
+
+export const getStaticPaths = (async () => {
+  const entries = await getAllLogEntries();
+  return entries.map((entry) => ({
+    params: { slug: entry.fields.slug },
+    props: { entry },
+  }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props as { entry: LogEntry };
+
+const bodyHtml = documentToHtmlString(entry.fields.body);
+
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+const coverImageUrl = entry.fields.coverImage?.fields?.file?.url
+  ? `https:${entry.fields.coverImage.fields.file.url}`
+  : null;
+---
+
+<Layout title={`${entry.fields.title} · Log · Aymen Khedhriya`}>
+  <div class="px-4 max-w-4xl flex flex-col gap-12 items-start lg:py-24 py-16 lg:px-0 mx-auto">
+    <div class="w-full">
+      <Nav />
+    </div>
+
+    <article class="w-full">
+      <a href="/log" class="underline text-sm">← Back to Log</a>
+
+      <span class="block text-sm text-ink/60 mt-6">
+        {formatDate(entry.fields.publishedDate)}
+      </span>
+      <h1 class="text-4xl font-bold mt-1">{entry.fields.title}</h1>
+
+      {
+        entry.fields.tags && entry.fields.tags.length > 0 && (
+          <div class="flex gap-3 mt-4 text-sm text-ink/50">
+            {entry.fields.tags.map((tag) => <span>#{tag}</span>)}
+          </div>
+        )
+      }
+
+      {
+        coverImageUrl && (
+          <img
+            src={coverImageUrl}
+            alt={entry.fields.title}
+            class="w-full mt-8 rounded-lg"
+          />
+        )
+      }
+
+      <div class="prose prose-neutral max-w-none mt-8" set:html={bodyHtml} />
+    </article>
+  </div>
+</Layout>

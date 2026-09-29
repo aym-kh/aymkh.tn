@@ -1,0 +1,119 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import SectionTitle from "../../components/ui/SectionTitle.astro";
+import { getAllLogEntries, coverImageUrl } from "../../lib/contentful";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const entries = await getAllLogEntries();
+  return paginate(entries, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+---
+
+<Layout title="Log · Aymen Khedhriya">
+  <div
+    class="px-4 max-w-4xl flex flex-col gap-24 items-start lg:py-24 py-16 lg:px-0 mx-auto"
+  >
+    <div class="w-full">
+      <Nav />
+    </div>
+
+    <SectionTitle title="I write about things 🤷‍♂️" subTitle="My Blog" />
+
+    <div class="w-full border-t border-ink pt-12">
+      {
+        page.data.length === 0 && (
+          <p class="text-ink/60">Nothing here yet — check back soon.</p>
+        )
+      }
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          page.data.map((entry) => {
+            const { title, slug, excerpt, publishedDate, tags } = entry.fields;
+            const imageUrl = coverImageUrl(entry);
+            return (
+              <a
+                href={`/log/${slug}`}
+                class="group flex flex-col overflow-hidden rounded-[14px] border border-line bg-page no-underline transition-[border-color] duration-150 hover:border-line-strong"
+              >
+                <div class="aspect-video overflow-hidden border-b border-line bg-fill">
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={title}
+                      width="640"
+                      height="360"
+                      loading="lazy"
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    />
+                  ) : (
+                    <div class="flex h-full w-full items-center justify-center">
+                      <span class="text-3xl font-extrabold tracking-[-0.04em] text-muted opacity-40">
+                        vaga
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div class="flex flex-1 flex-col gap-3 p-5">
+                  {Array.isArray(tags) && tags.length > 0 && (
+                    <div class="flex flex-wrap gap-1.5">
+                      {tags.map((tag) => (
+                        <span class="rounded-full border border-line px-2.5 py-0.5 text-xs font-medium text-muted">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <h2 class="text-base font-bold leading-snug tracking-[-0.01em] text-ink">
+                    {title}
+                  </h2>
+                  {excerpt && (
+                    <p class="line-clamp-3 flex-1 text-sm leading-relaxed text-body">
+                      {excerpt}
+                    </p>
+                  )}
+                  <time class="mt-auto text-xs text-muted text-stone-400">
+                    {formatDate(publishedDate)}
+                  </time>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+
+    {
+      (page.url.prev || page.url.next) && (
+        <div class="w-full flex justify-between border-t border-ink pt-8">
+          {page.url.prev ? (
+            <a href={page.url.prev} class="underline">
+              ← Newer
+            </a>
+          ) : (
+            <span />
+          )}
+          {page.url.next ? (
+            <a href={page.url.next} class="underline">
+              Older →
+            </a>
+          ) : (
+            <span />
+          )}
+        </div>
+      )
+    }
+  </div>
+</Layout>

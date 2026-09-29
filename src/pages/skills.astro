@@ -1,0 +1,110 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import SectionTitle from "../components/ui/SectionTitle.astro";
+
+const services = [
+  {
+    category: "UI / UX DESIGN",
+    leftColumn: ["App Design", "Website Design", "Landing Page Design"],
+    rightColumn: ["Design Systems", "Wireframing", "Prototyping"],
+  },
+  {
+    category: "WEB DEVELOPMENT",
+    leftColumn: [
+      "React Development",
+      "Angular Development",
+      "Next.js Development",
+    ],
+    rightColumn: ["Node.js Backend", "API Integration", "Database Design"],
+  },
+  {
+    category: "AI-AUGMENTED DEVELOPMENT",
+    leftColumn: [
+      "AI-Assisted Coding (Claude Code, Copilot)",
+      "LLM API Integration (OpenAI, Anthropic)",
+      "Prompt Engineering",
+    ],
+    rightColumn: [
+      "RAG & Vector Search",
+      "Workflow Automation (n8n, Zapier)",
+      "AI Agent Development",
+    ],
+  },
+  {
+    category: "DEVOPS & CLOUD",
+    leftColumn: [
+      "AWS Infrastructure",
+      "Docker Containerization",
+      "CI/CD Pipelines",
+    ],
+    rightColumn: [
+      "Cloud Optimization",
+      "Deployment Automation",
+      "Monitoring & Scaling",
+    ],
+  },
+  {
+    category: "THIRD-PARTY INTEGRATIONS",
+    leftColumn: [
+      "Authentication (Auth0)",
+      "Email Services (SendGrid)",
+      "Payment Gateways",
+    ],
+    rightColumn: [
+      "Self-Hosted Alternatives",
+      "Media Management (ImageKit)",
+      "Cost Optimization",
+    ],
+  },
+  {
+    category: "TECHNICAL LEADERSHIP",
+    leftColumn: [
+      "Team Mentoring",
+      "Code Review Systems",
+      "Development Standards",
+    ],
+    rightColumn: [
+      "Project Management",
+      "Agile Implementation",
+      "Technical Documentation",
+    ],
+  },
+];
+---
+
+<Layout title="Skills · Aymen Khedhriya">
+  <div
+    class="px-4 max-w-4xl flex flex-col gap-24 items-start lg:py-24 py-16 lg:px-0 mx-auto"
+  >
+    <div class="w-full">
+      <Nav />
+    </div>
+
+    <SectionTitle title="What I do?" subTitle="Skills" />
+
+    {
+      services.map((service) => (
+        <div class="border-t border-ink py-12 w-full">
+          <h2 class="text-4xl font-bold mb-10">{service.category}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+              {service.leftColumn.map((item) => (
+                <p class="text-ink/60 hover:text-ink transition-colors">
+                  {item}
+                </p>
+              ))}
+            </div>
+            <div class="space-y-4">
+              {service.rightColumn.map((item) => (
+                <p class="text-ink/60 hover:text-ink transition-colors">
+                  {item}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</Layout>
