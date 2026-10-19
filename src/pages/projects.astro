@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import SectionTitle from "../components/ui/SectionTitle.astro";
+import PhotoCollage from "../components/ui/PhotoCollage.astro";
+import { promise } from "astro:schema";
+
+const projects = [
+  {
+    title: "VAGA",
+    description: [
+      "Suite of tools to help small and medium sized business manage their daily workflows (invocing, clients, suppliers, credits, ...)",
+    ],
+    Stack: [
+      "Angular",
+      "Supabase",
+      "NestJS",
+      "Docker",
+      "Astrojs",
+      "GitHub Actions",
+      "Resend",
+      "BullMQ",
+    ],
+    link: "https://vaga.tn",
+  },
+  {
+    title: "Junk Drawer",
+    description: [
+      "Junk Drawer allows users to physically drag desktop icons into an animated, interactive desk drawer to keep their desktop clean without actually.",
+    ],
+    Stack: ["Angular", "MatterJS", "Rust", "Tauri v2", "GitHub Actions"],
+    link: "https://jd.aymkh.tn",
+  },
+  {
+    title: "COD4 Tactics",
+    description: [
+      "An interactive, high-performance web tool for Call of Duty 4: Modern Warfare (2007).",
+    ],
+    Stack: ["Angular", "GitHub Actions", "Netlify"],
+    link: "https://cod4.aymkh.tn",
+  },
+];
+---
+
+<Layout title="Projects · Aymen Khedhriya">
+  <div
+    class="px-4 max-w-4xl flex flex-col gap-24 items-start lg:py-24 py-16 lg:px-0 mx-auto"
+  >
+    <div class="w-full">
+      <Nav />
+    </div>
+
+    <SectionTitle title="Stuff I made" subTitle="Projects" />
+
+    <section>
+      {
+        projects.map((project) => (
+          <div class="border-t border-ink py-6 w-full">
+            <h2 class="text-4xl font-bold">{project.title}</h2>
+            <a href={project.link} class="underline text-red-500">
+              {project.link}
+            </a>
+            <div class="w-full flex flex-col gap-1">
+              <p>{project.description}</p>
+              <div class="flex items-center gap-2 text-stone-600">
+                {project.Stack.map((s) => (
+                  <small>{s}</small>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </section>
+  </div>
+</Layout>
