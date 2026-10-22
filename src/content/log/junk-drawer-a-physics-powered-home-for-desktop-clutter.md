@@ -1,6 +1,6 @@
 ---
 title: Junk Drawer, A Tiny Physics-Powered Home for Desktop Clutter
-excerpt: I built a small desktop app that turns tidying up into a tactile interaction: drop files into a transparent drawer, watch them tumble around, and bring them back when you need them.
+excerpt: I built a small desktop app that turns tidying up into a tactile interaction, drop files into a transparent drawer, watch them tumble around, and bring them back when you need them.
 publishedDate: 2026-10-23
 coverImage: /images/log/junk-drawer-a-physics-powered-home-for-desktop-clutter.webp
 tags:
