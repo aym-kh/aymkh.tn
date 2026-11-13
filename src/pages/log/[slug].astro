@@ -63,3 +63,46 @@ function formatDate(date: Date) {
     </article>
   </div>
 </Layout>
+
+<script>
+  const codeBlocks = document.querySelectorAll(
+    '.prose pre[data-language="mermaid"]',
+  );
+
+  if (codeBlocks.length > 0) {
+    const { default: mermaid } = await import("mermaid");
+    mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+
+    for (const [index, pre] of Array.from(codeBlocks).entries()) {
+      const code = pre.querySelector("code");
+      if (!code) continue;
+
+      try {
+        const { svg } = await mermaid.render(
+          `mermaid-diagram-${index}`,
+          code.textContent ?? "",
+        );
+        const figure = document.createElement("figure");
+        figure.className = "mermaid-diagram";
+        figure.innerHTML = svg;
+        pre.replaceWith(figure);
+      } catch (error) {
+        console.error("Failed to render Mermaid diagram.", error);
+      }
+    }
+  }
+</script>
+
+<style>
+  .mermaid-diagram {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .mermaid-diagram :global(svg) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+</style>
